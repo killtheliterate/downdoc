@@ -1,5 +1,4 @@
 var espree = require('espree')
-
 /**
  * Parse JavaScript into an AST. ES2015 options enabled.
  *

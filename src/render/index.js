@@ -15,8 +15,6 @@ var cleanComment = function (comment) {
 }
 
 /**
- * Takes 
- * 
  * @summary Doc -> Markdown
  */
 var template = function (doc) {
@@ -26,16 +24,21 @@ var template = function (doc) {
 /**
  * A doc looks like this:
  *
+ * TODO:
+ *   Extract @summary if it exists and use it as a type signature for the
+ *   function. property: `signature`
+ *  
  * ```js
  * {
  *   name: '', // Exported Variable Name
  *   comment: '', // The leading comment
+ *   // signature: 'string' // the type signature of the function
  * }
  * ```
  *
  * @summary ASTNode -> Doc
  */
-var generateDocs = function (node) { 
+var generateDoc = function (node) { 
    return {
      name: first(node.declaration.declarations
        .map(function (n) { return n.id.name })),
@@ -56,7 +59,7 @@ module.exports = function (ast) {
     .filter(function (node) {
       return node.type === 'ExportNamedDeclaration'
     })
-    .map(generateDocs)
+    .map(generateDoc)
     .map(template)
     .join('\n\n')
 }

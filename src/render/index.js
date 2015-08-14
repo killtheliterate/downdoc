@@ -67,7 +67,6 @@ var generateDoc = function (node) {
      .filter(function (comment) { return comment.type === 'Block' })
      .map(function (comment) { return comment.value })
      .map(cleanComment)))
-   console.log(comment.tags.summary)
    return {
      name: first(node.declaration.declarations
        .map(function (n) { return n.id.name })),

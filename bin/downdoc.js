@@ -21,7 +21,7 @@ var write = function (file) {
 
   return ensureDir(cwd + directory)
     .chain(function () {
-      return fs.writeAsText(file.path, file.contents)
+      return fs.writeAsText(file.path, file.content)
     })
 }
 

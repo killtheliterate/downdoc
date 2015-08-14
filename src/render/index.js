@@ -18,12 +18,37 @@ var cleanComment = function (comment) {
  * @summary Doc -> Markdown
  */
 var template = function (doc) {
-  return '## ' + doc.name + '\n' + doc.comment
+  return '## ' + doc.name + ' :: ' + doc.signature + '\n' + doc.comment
+}
+
+var parseComment = function (comment) {
+
+  var isTag = function (line) {
+    return first(first(line.split(' ')).split('')) === '@'
+  }
+  var isNotTag = function (line) {
+    return first(first(line.split(' ')).split('')) !== '@'
+  }
+
+  var body = comment
+    .split('\n')
+    .filter(isNotTag)
+    .join('\n')
+
+  var tags = comment
+    .split('\n')
+    .filter(isTag)
+    .reduce(function (map, line) {
+      var content = line.split(' ').slice(1).join(' ')
+      var tag = line.split(' ')[0].replace('@', '')
+      map[tag] = content
+      return map 
+    }, {})
+
+  return {body: body, tags: tags}
 }
 
 /**
- * TODO:
- *   Extract `@summary` if it exists as the property `signature`
  *
  * A doc looks like this:
  *  
@@ -31,20 +56,23 @@ var template = function (doc) {
  * {
  *   name: '', // Exported Variable Name
  *   comment: '', // The leading comment
- *   // signature: 'string' // the type signature of the function
+ *   signature: '' // the type signature of the function
  * }
  * ```
  *
  * @summary ASTNode -> Doc
  */
 var generateDoc = function (node) { 
+   var comment = parseComment(first(node.leadingComments
+     .filter(function (comment) { return comment.type === 'Block' })
+     .map(function (comment) { return comment.value })
+     .map(cleanComment)))
+   console.log(comment.tags.summary)
    return {
      name: first(node.declaration.declarations
        .map(function (n) { return n.id.name })),
-     comment: first(node.leadingComments
-       .filter(function (comment) { return comment.type === 'Block' })
-       .map(function (comment) { return comment.value })
-       .map(cleanComment))
+     comment:  comment.body,
+     signature: comment.tags.summary
   }
 }
 

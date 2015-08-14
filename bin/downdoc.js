@@ -1,27 +1,62 @@
 #!/usr/bin/env node
 
-var doc = require('..')
 var argv = require('minimist')(process.argv.slice(2))
+
 var fs = require('io.filesystem')(require('fs'))
+var Task = require('data.task')
+var async = require('control.async')(Task)
+
+var ensureDir = async.liftNode(require('fs-extra').ensureDir)
 
 var cwd = process.cwd()
-
-var folder = cwd + '/' + argv._[0]
+var folder = argv._[0]
 var out = cwd + '/' + argv._[1]
 
-/**
- * TODO:
- *   Parallelize the process of reading/writing the JS files to markdown docs. 
- */
-fs.listDirectoryRecursively(folder)
-  .map(function (filePath) {
-    return {
-      path: out + '/' + filePath,
-      content: doc(cwd + '/' + folder + '/' + filePath) 
-    }
+var doc = require('..')
+
+var write = function (file) {
+  var directory = file.path
+    .replace(cwd, '')
+    .replace(file.path.split('/').slice(-1), '')
+
+  return ensureDir(cwd + directory)
+    .chain(function () {
+      return fs.writeAsText(file.path, file.contents)
+    })
+}
+
+var read = function (file) {
+  return new Task(function (reject, resolve) {
+    fs.readAsText(file).fork(reject, function (content) {
+      resolve({
+        path: file.replace(cwd, '').replace('/' + folder, ''),
+        content: content,
+      })
+    })
   })
-  .map(/* Write to doc folder */)
+}
+
+var parse = function (file) {
+  return {
+    path: file.path,
+    content: doc(file.content),
+  }
+}
+
+fs.listDirectoryRecursively(cwd + '/' + folder)
+  .chain(function (files) { return async.parallel(files.map(read)) })
+  .map(function (files) { return files.map(parse) })
+  .chain(function (files) {
+    return async.parallel(files.map(function (file) {
+      return write({
+        path: out + file.path.replace('.js', '.md'),
+        content: file.content
+      })
+    }))
+  })
   .fork(
     function (e) {throw e},
-    function (x) {console.log(x)}
+    function (x) {
+      console.log('Documentation has been generated.')
+    }
   )

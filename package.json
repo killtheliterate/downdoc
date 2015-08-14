@@ -13,7 +13,9 @@
   "license": "MIT",
   "dependencies": {
     "control.async": "^0.5.2",
+    "data.task": "^3.0.0",
     "espree": "^2.2.4",
+    "fs-extra": "^0.23.1",
     "io.filesystem": "^0.1.0",
     "minimist": "^1.1.3"
   }

@@ -8,7 +8,5 @@ var render = require('./src/render')
  * @summary String -> Markdown
  */
 module.exports = function (file) {
-  return fs.readAsText(file)
-    .map(parse)
-    .map(render)
+  return render(parse(file)) //file.map(parse).map(render)
 }

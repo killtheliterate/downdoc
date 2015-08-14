@@ -13,7 +13,7 @@ var out = cwd + '/' + argv._[1]
  * TODO:
  *   Parallelize the process of reading/writing the JS files to markdown docs. 
  */
-files(folder)
+fs.listDirectoryRecursively(folder)
   .map(function (filePath) {
     return {
       path: out + '/' + filePath,
@@ -23,5 +23,5 @@ files(folder)
   .map(/* Write to doc folder */)
   .fork(
     function (e) {throw e},
-    function (x) {console.log('Master, I\'ve written the docs.')}
+    function (x) {console.log(x)}
   )

@@ -13,20 +13,20 @@ doc(cwd + '/examples/punctuate.js')
     function (x) {console.log(x)}
   )
 
-// function getJSFiles (dir) {
-//   return fs.listDirectory(dir)
-//     .chain(function (path) {
-//        return fs.isDirectory(path)
-//          .map(function (isDir) {
-//            if (!isDir) return path
-//            return getJSFiles(path)
-//          })
-//     })
-// }
-// 
-// fs.isDirectory(folder)
-//   .map(function (isDir) {
-//     if (!isDir) throw new Error('Please provide a folder to downdoc-cli')
-//     return folder
-//   })
-//   .chain(getJSFiles)
+function getJSFiles (dir) {
+  return fs.listDirectory(dir)
+    .chain(function (path) {
+       return fs.isDirectory(path)
+         .map(function (isDir) {
+           if (!isDir) return path
+           return getJSFiles(path)
+         })
+    })
+}
+
+fs.isDirectory(folder)
+  .map(function (isDir) {
+    if (!isDir) throw new Error('Please provide a folder to downdoc-cli')
+    return folder
+  })
+  .chain(getJSFiles)

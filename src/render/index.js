@@ -22,11 +22,10 @@ var template = function (doc) {
 }
 
 /**
- * A doc looks like this:
- *
  * TODO:
- *   Extract @summary if it exists and use it as a type signature for the
- *   function. property: `signature`
+ *   Extract `@summary` if it exists as the property `signature`
+ *
+ * A doc looks like this:
  *  
  * ```js
  * {

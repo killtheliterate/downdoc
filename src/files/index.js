@@ -13,14 +13,14 @@
  * ```
  *
  * ```js
- * files('src') // ~=> [
- *                       {path: 'parse/helper.js', content: ''},
- *                       {path: 'parse/index.js', content: ''},
- *                       {path: 'render/index.js', content: ''},
- *                     ]
+ * files('src') === [
+ *                    'parse/helper.js',
+ *                    'parse/index.js',
+ *                    'render/index.js',
+ *                  ]
  * ```
  *
- * @summary String -> Array Object
+ * @summary String -> Array String 
  */
 module.export = function (folder) {
   /**

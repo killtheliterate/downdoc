@@ -5,28 +5,23 @@ var argv = require('minimist')(process.argv.slice(2))
 var fs = require('io.filesystem')(require('fs'))
 
 var cwd = process.cwd()
-var folder = cwd + '/' + argv._[0]
 
-doc(cwd + '/examples/punctuate.js')
+var folder = cwd + '/' + argv._[0]
+var out = cwd + '/' + argv._[1]
+
+/**
+ * TODO:
+ *   Parallelize the process of reading/writing the JS files to markdown docs. 
+ */
+files(folder)
+  .map(function (filePath) {
+    return {
+      path: out + '/' + filePath,
+      content: doc(cwd + '/' + folder + '/' + filePath) 
+    }
+  })
+  .map(/* Write to doc folder */)
   .fork(
     function (e) {throw e},
-    function (x) {console.log(x)}
+    function (x) {console.log('Master, I\'ve written the docs.')}
   )
-
-function getJSFiles (dir) {
-  return fs.listDirectory(dir)
-    .chain(function (path) {
-       return fs.isDirectory(path)
-         .map(function (isDir) {
-           if (!isDir) return path
-           return getJSFiles(path)
-         })
-    })
-}
-
-fs.isDirectory(folder)
-  .map(function (isDir) {
-    if (!isDir) throw new Error('Please provide a folder to downdoc-cli')
-    return folder
-  })
-  .chain(getJSFiles)

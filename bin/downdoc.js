@@ -12,7 +12,12 @@ var render = require('../src/render')
 
 var downdoc = require('../lib/downdoc')
 
-write(compose(render(downdoc.pluckAST, downdoc.template), parse), folder, out)
+write(
+  compose(render(downdoc.pluckAST, downdoc.template), parse),
+  downdoc.extension,
+  folder,
+  out
+)
   .fork(
     function (e) {throw e},
     function (x) {

@@ -13,7 +13,7 @@ var ensureDir = async.liftNode(require('fs-extra').ensureDir)
  *
  * @summary (Doc -> String) -> String -> String -> Future Error Void
  */
-module.exports = function (doccer, folder, out) {
+module.exports = function (doccer, ext, folder, out) {
   var cwd = process.cwd()
 
   var write = function (file) {
@@ -51,7 +51,7 @@ module.exports = function (doccer, folder, out) {
     .chain(function (files) {
       return async.parallel(files.map(function (file) {
         return write({
-          path: out + file.path.replace('.js', '.md'),
+          path: out + file.path.replace('.js', ext),
           content: file.content
         })
       }))

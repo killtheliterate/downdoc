@@ -21,6 +21,11 @@ module.exports = function (doccer, ext, folder, out) {
       .replace(cwd, '')
       .replace(file.path.split('/').slice(-1), '')
   
+    // no-op if no docs
+    if (file.content.length <= 0) return new Task(function (reject, resolve) {
+      resolve(function () {})
+    })
+
     return ensureDir(cwd + directory)
       .chain(function () {
         return fs.writeAsText(file.path, file.content)

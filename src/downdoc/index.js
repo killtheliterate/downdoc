@@ -1,3 +1,5 @@
+var curry = require('core.lambda').curry
+
 var first = function (array) { return array[0] }
 
 /**
@@ -12,13 +14,6 @@ var cleanComment = function (comment) {
     .split('\n')
     .map(function (line) { return line.replace('  ', '') })
     .join('\n')
-}
-
-/**
- * @summary Doc -> Markdown
- */
-var template = function (doc) {
-  return '## ' + doc.name + ' :: ' + doc.signature + '\n' + doc.comment
 }
 
 var parseComment = function (comment) {
@@ -60,32 +55,40 @@ var parseComment = function (comment) {
  * }
  * ```
  *
- * @summary ASTNode -> Doc
+ * @summary AST -> Object
  */
-var generateDoc = function (node) { 
-   var comment = parseComment(first(node.leadingComments
-     .filter(function (comment) { return comment.type === 'Block' })
-     .map(function (comment) { return comment.value })
-     .map(cleanComment)))
-   return {
-     name: first(node.declaration.declarations
-       .map(function (n) { return n.id.name })),
-     comment:  comment.body,
-     signature: comment.tags.summary
-  }
+exports.pluckAST = function (ast) { 
+  return ast.body
+    .filter(function (node) {
+      return node.type === 'ExportNamedDeclaration'
+    })
+    .map(function (node) {
+      var comment = parseComment(first(node.leadingComments
+        .filter(function (comment) { return comment.type === 'Block' })
+        .map(function (comment) { return comment.value })
+        .map(cleanComment)))
+      return {
+        name: first(node.declaration.declarations
+          .map(function (n) { return n.id.name })),
+        comment:  comment.body,
+        signature: comment.tags.summary
+      }
+    })
+}
+
+/**
+ * @summary Object -> String
+ */
+exports.template = function (doc) {
+  return '## ' + doc.name + ' :: ' + doc.signature +
+    '\n' + doc.comment + '\n\n'
 }
 
 /**
  * Create a markdown string from an AST.
  *
- * @summary AST -> Markdown 
+ * @summary (AST -> Object) -> (Object -> String) -> AST -> String
  */
-module.exports = function (ast) {
-  return ast.body
-    .filter(function (node) {
-      return node.type === 'ExportNamedDeclaration'
-    })
-    .map(generateDoc)
-    .map(template)
-    .join('\n\n')
-}
+exports.render = curry(3, function (pluckAST, template, ast) {
+  return pluckAST(ast).map(template)
+})

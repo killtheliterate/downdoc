@@ -8,7 +8,8 @@ var out = process.cwd() + '/' + argv._[1]
 
 var write = require('../src/write')
 var parse = require('../src/parse')
-var render = require('../src/render')
+var downdoc = require('../src/downdoc')
+var render = downdoc.render(downdoc.pluckAST, downdoc.template)
 
 write(compose(render, parse), folder, out)
   .fork(

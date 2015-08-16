@@ -18,9 +18,29 @@ module.exports = function (doccer, ext, folder, out) {
   var cwd = process.cwd()
 
   var write = function (file) {
+
+    // This is probably a really bad way to do this.
+    var setName = function (path, name) {
+      var pathArray = path.split('/') 
+      return pathArray
+        .slice(0, pathArray.length - 1)
+        .concat(
+          pathArray
+            .slice(-1)
+            .map(function (oldname) {
+              var ext = oldname.split('.').slice(-1)[0]
+              return name + '.' + ext
+            })
+        )
+        .join('/')
+    } 
+    var fileName = file.path.split('/').slice(-1)[0]
+
     var directory = file.path
       .replace(cwd, '')
-      .replace(file.path.split('/').slice(-1), '')
+      .replace(fileName, '')
+
+    var path = fileName.match('index') ? setName(file.path, 'README') : file.path
   
     // no-op if no docs
     if (file.content.length <= 0) return new Task(function (reject, resolve) {
@@ -29,7 +49,7 @@ module.exports = function (doccer, ext, folder, out) {
 
     return ensureDir(cwd + directory)
       .chain(function () {
-        return fs.writeAsText(file.path, file.content)
+        return fs.writeAsText(path, file.content)
       })
   }
   

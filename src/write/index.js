@@ -2,6 +2,7 @@ var fs = require('io.filesystem')(require('fs'))
 var Task = require('data.task')
 var async = require('control.async')(Task)
 var ensureDir = async.liftNode(require('fs-extra').ensureDir)
+var remove = async.liftNode(require('fs-extra').remove)
 
 /**
  * Takes a `doccer` or documentation creating function (typically a composition

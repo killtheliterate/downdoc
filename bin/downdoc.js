@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 var compose = require('core.lambda').compose
 
+var Task = require('data.task')
+var async = require('control.async')(Task)
+var remove = async.liftNode(require('fs-extra').remove)
+
 var argv = require('minimist')(process.argv.slice(2))
 
 var folder = argv._[0]
@@ -12,12 +16,14 @@ var render = require('../src/render')
 
 var downdoc = require('../lib/downdoc')
 
-write(
-  compose(render(downdoc.pluckAST, downdoc.template), parse),
-  downdoc.extension,
-  folder,
-  out
-)
+remove(out).chain(function () {
+  return write(
+    compose(render(downdoc.pluckAST, downdoc.template), parse),
+    downdoc.extension,
+    folder,
+    out
+  )
+})
   .fork(
     function (e) {throw e},
     function (x) {

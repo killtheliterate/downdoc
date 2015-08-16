@@ -7,8 +7,7 @@ punctuate('!', 'Hi') === 'Hi!'
 ```
  
  
-
-,## words :: String -> Array String
+## words :: String -> Array String
 
 Get all the words from a string.
  
@@ -18,4 +17,3 @@ words('hello darkness my old friend') ===
 ```
  
  
-

@@ -56,9 +56,10 @@ module.exports = function (doccer, ext, folder, out) {
     .map(function (files) { return files.map(parse) })
     .chain(function (files) {
       return async.parallel(files.map(function (file) {
+        // console.log(file.content.join('\n'))
         return write({
           path: out + file.path.replace('.js', ext),
-          content: file.content
+          content: file.content.join('\n')
         })
       }))
     })

@@ -18,6 +18,7 @@
     "espree": "^2.2.4",
     "fs-extra": "^0.23.1",
     "io.filesystem": "^0.1.0",
+    "lodash.get": "^3.7.0",
     "minimist": "^1.1.3"
   }
 }

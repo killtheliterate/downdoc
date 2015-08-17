@@ -1,10 +1,25 @@
-## water :: () -> ()
+# downdoc
+> Simple JavaScript markdown documentation generator.
 
-Water is a noop
- 
- 
-## defaultExport :: () -> ()
+## How does it work?
 
-Fire is a noop too
- 
- 
+Looks for ES2015 named exports and their leading comments and creates markdown
+files that mirror the folder structure of the one supplied.
+
+## Install
+
+```shell
+npm i downdoc
+```
+
+## Usage
+
+```shell
+downdoc src/js docs
+```
+
+## Bugs?
+
+Probably. [Tell me about them.](https://github.com/LegitTalon/downdoc/issues/new)
+
+Inspired by PureScript documentation.

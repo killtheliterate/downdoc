@@ -5,10 +5,30 @@ var compose = require('lodash.compose')
 var async = require('control.async')(require('data.task'))
 var remove = async.liftNode(require('fs-extra').remove)
 
+var error = function (message) {
+  console.log('\n' + 'ERROR: ' + message)
+  usage()
+  process.exit(1)
+} 
+
+var usage = function () {
+  console.log([
+    '\nUsage: downdoc [OPTION] [SRC_DIR] [OUT_DIR]\n\n',
+    '  -t --template      A local or npm module\n'
+  ].join(''))
+}
+
 var argv = require('minimist')(process.argv.slice(2))
 var folder = argv._[0]
 var out = argv._[1]
+var help = argv.help || argv.h
 var plugin = argv.template || argv.t || './lib/downdoc'
+
+
+if (help) { usage(); process.exit(0) }
+if (!folder) error('Please provide a source folder.')
+if (!out) error('Please provide an out folder.')
+
 
 var write = require('../src/write')
 var parse = require('../src/parse')
@@ -43,6 +63,6 @@ remove(path.resolve(out))
     function (e) {throw e},
     function () {
       console.log(
-        'Documentation has been written to `' + path.resolve(out) + '`')
+        '\nDocumentation has been written to `' + path.resolve(out) + '`\n')
     }
   )

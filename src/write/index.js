@@ -6,6 +6,8 @@ var curry = require('core.lambda').curry
 var writeAsText = fs.writeAsText
 
 /**
+ * Writes the files given in parallel to the provided folder.
+ *
  * @summary String -> Array File -> Future Error (IO ())
  */
 module.exports = curry(2, function (out, files) {

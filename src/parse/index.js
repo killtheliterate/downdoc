@@ -2,7 +2,9 @@ var espree = require('espree')
 var extend = require('xtend')
 
 /**
- * Parse file contents into an AST. ES2015 options enabled.
+ * Parse file contents into an available as `file.ast` AST.
+ *
+ * ES2015 options enabled.
  *
  * @summary File -> File
  */

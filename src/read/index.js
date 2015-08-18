@@ -4,6 +4,7 @@ var async = require('control.async')(Task)
 var curry = require('core.lambda').curry
 
 var listDirectoryRecursively = fs.listDirectoryRecursively
+var readAsText = fs.readAsText
 var cwd = process.cwd()
 
 /**
@@ -14,27 +15,36 @@ var cwd = process.cwd()
  *
  * @summary String -> String -> File
  */
-var readWithRoot = curry(2, function (root, file) {
-  return new Task(function (reject, resolve) {
-    fs.readAsText(file)
-      .fork(reject, function (content) {
+var readWithRoot = function (root) {
+  return function (file) {
+    return new Task(function (reject, resolve) {
+      readAsText(file).fork(reject, function (content) {
         resolve({
           path: file.replace(cwd, '').replace('/' + root, ''),
           content: content,
         })
       })
-  })
-})
+    })
+  }
+}
 
 /**
- * Reads all the files in a folder, turns them into a file object.
+ * Reads all the files in a folder that match the predicate and turns them into
+ * an array of file objects.
+ *
+ * ```js
+ * {
+ *   path :: String,
+ *   content :: String,
+ * }
+ * ```
  *
  * @summary (File -> Bool) -> String -> IO (Array File)
  */
 module.exports = curry(2, function (predicate, folder) {
   return listDirectoryRecursively(cwd + '/' + folder)
     .chain(function (files) {
-      return async.parallel(files.map(function (file) { return readWithRoot(folder, file) }))
+      return async.parallel(files.map(readWithRoot(folder)))
     })
     .map(function (files) {
       return files.filter(predicate)

@@ -12,12 +12,11 @@ var write = require('../src/write')
 var parse = require('../src/parse')
 var read = require('../src/read')
 
-var log = function (x) {console.log(x); return x}
 var downdoc = require('../lib/downdoc')
 var createDocs = compose(downdoc.template, downdoc.pluckAST)
 
 var jsFile = function (file) {
-  return true // file.match(/(.+)\.js$/)
+  return file.path.match(/(.+)\.js$/)
 }
 
 remove(process.cwd() + '/' + out)
@@ -26,7 +25,6 @@ remove(process.cwd() + '/' + out)
       return files.map(parse).map(createDocs)
     })
   })
-  // .map(function (files) {console.log(files); return files})
   .chain(write(out))
   .fork(
     function (e) {throw e},

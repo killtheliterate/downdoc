@@ -22,9 +22,9 @@ module.exports = curry(2, function (out, files) {
       folder.pop()
       folder = path.resolve(out + folder.join('/'))
 
+      if (file.content.length <= 0) return Task.of(null)
       return ensureDir(folder)
         .chain(function () {
-          if (file.content.length <= 0) return Task.of(null)
           return writeAsText(filepath, file.content)
         })
       })

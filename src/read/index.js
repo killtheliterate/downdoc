@@ -1,5 +1,4 @@
 var path = require('path')
-var root = require('app-root-path')
 
 var fs = require('io.filesystem')(require('fs'))
 var Task = require('data.task')
@@ -23,8 +22,7 @@ var readWithRoot = function (folder) {
     return new Task(function (reject, resolve) {
       readAsText(file).fork(reject, function (content) {
         var filepath = file
-          .replace(root, '')
-          .replace('/' + folder.split('/').slice(-1), '')
+          .replace(new RegExp('(.+)/' + folder), '')
         resolve({
           path: filepath,
           content: content,

@@ -22,7 +22,7 @@ var argv = require('minimist')(process.argv.slice(2))
 var folder = argv._[0]
 var out = argv._[1]
 var help = argv.help || argv.h
-var plugin = argv.template || argv.t || './lib/downdoc'
+var plugin = argv.template || argv.t
 
 
 if (help) { usage(); process.exit(0) }
@@ -34,11 +34,14 @@ var write = require('../src/write')
 var parse = require('../src/parse')
 var read = require('../src/read')
 
-var createDocs
-try {
-  createDocs = require(plugin)
-} catch (e) {
-  createDocs = require(path.resolve(plugin))
+var createDocs = require('../lib/downdoc')
+
+if (plugin) {
+  try {
+    createDocs = require(plugin)
+  } catch (e) {
+    createDocs = require(path.resolve(plugin))
+  }
 }
 
 var jsFile = function (file) {

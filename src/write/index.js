@@ -1,7 +1,8 @@
 var path = require('path')
 
 var fs = require('io.filesystem')(require('fs'))
-var async = require('control.async')(require('data.task'))
+var Task = require('data.task')
+var async = require('control.async')(Task)
 var ensureDir = async.liftNode(require('fs-extra').ensureDir)
 var curry = require('core.lambda').curry
 
@@ -23,6 +24,7 @@ module.exports = curry(2, function (out, files) {
 
       return ensureDir(folder)
         .chain(function () {
+          if (file.content.length <= 0) return Task.of(null)
           return writeAsText(filepath, file.content)
         })
       })

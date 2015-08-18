@@ -31,13 +31,13 @@ remove(path.resolve(out))
       return files.map(parse).map(createDocs)
     })
   })
-  
   .chain(function (files) {
     return write(out, files)
   })
   .fork(
     function (e) {throw e},
-    function (x) {
-      console.log('Done.')
+    function () {
+      console.log(
+        'Documentation has been written to `' + path.resolve(out) + '`')
     }
   )

@@ -1,7 +1,7 @@
 {
   "name": "downdoc",
   "version": "1.0.0",
-  "description": "Simple JavaScript markdown documentation generator.",
+  "description": "Simple JavaScript documentation generator.",
   "main": "index.js",
   "bin": {
     "downdoc": "bin/downdoc.js"

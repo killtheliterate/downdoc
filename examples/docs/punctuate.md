@@ -1,4 +1,4 @@
-## punctuate :: String -> String -> String
+## defaultExport :: String -> String -> String
 
 Put something at the end of a string. Probably a punctuation, but whevs yolo.
  

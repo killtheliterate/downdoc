@@ -7,7 +7,7 @@
  *
  * @summary String -> String -> String
  */
-export const punctuate = (punctuation, message) => message + punctuation
+export default (punctuation, message) => message + punctuation
 
 /**
  * Get all the words from a string.

@@ -117,7 +117,7 @@ var pluckAST = function (ast) {
  */
 var template = function (doclets) {
   return doclets.map(function (doclet) {
-    return '## ' + doclet.name + ' :: ' + doclet.signature +
+    return '`' + doclet.name + ' :: ' + doclet.signature + '`' +
       '\n\n' + doclet.comment
   }).join('\n')
 }
@@ -126,6 +126,7 @@ var template = function (doclets) {
  * @summary String -> String
  */
 var docPath = function (p) {
+
   var parsed = path.parse(p)
   var name = parsed.name.match('index') ? 'README' : parsed.name
   var ext = '.md'
@@ -136,9 +137,24 @@ var docPath = function (p) {
   }))
 }
 
-module.exports = function (file) {
-  return extend(file, {
+/**
+ * Create markdown docs from a VinylFile AST
+ *
+ * ```js
+ * var map = require('map-stream')
+ * var parse = require('downdoc/src/parse')
+ * var downdoc = require('downdoc')
+ *
+ * fs.src('src/*.js')
+ *   .pipe(map(parse))
+ *   .pipe(map(downdoc))
+ * ```
+ *
+ * @summary VinyFile -> ()
+ */
+module.exports = function (file, cb) {
+  cb(null, extend(file, {
     path: docPath(file.path),
-    content: template(pluckAST(file.ast))
-  })
+    contents: new Buffer(template(pluckAST(JSON.parse(String(file.contents)))))
+  }))
 }

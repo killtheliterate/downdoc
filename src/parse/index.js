@@ -2,19 +2,23 @@ var espree = require('espree')
 var extend = require('xtend')
 
 /**
- * Parse file contents into an AST available as `file.ast` AST.
+ * Parse vinyl file contents into an AST.
+ *
+ * ```js
+ * var map = require('map-stream')
+ * var parse = require('downdoc/src/parse')
+ *
+ * fs.src('src/*.js')
+ *   .pipe(map(parse))
+ * ```
  *
  * ES2015 syntax enabled
  *
- * ```
- * parse({path: '', content: ''}) // => {path: '', content: '', ast: {}}
- * ```
- *
- * @summary File -> File
+ * @summary VinylFile -> () 
  */
-module.exports = function (file) {
-  return extend(file, {
-    ast: espree.parse(file.content, {
+module.exports = function (file, cb) {
+  cb(null, extend(file, {
+    contents: new Buffer(JSON.stringify(espree.parse(String(file.contents), {
       attachComment: true,
       tolerant: true,
       ecmaFeatures: {
@@ -44,6 +48,6 @@ module.exports = function (file) {
         globalReturn: true,
         experimentalObjectRestSpread: true
       }
-    })
-  })
+    })))
+  }))
 }

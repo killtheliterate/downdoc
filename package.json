@@ -1,6 +1,6 @@
 {
   "name": "downdoc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple JavaScript documentation generator.",
   "main": "index.js",
   "bin": {

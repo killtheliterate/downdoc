@@ -2,9 +2,13 @@ var espree = require('espree')
 var extend = require('xtend')
 
 /**
- * Parse file contents into an available as `file.ast` AST.
+ * Parse file contents into an AST available as `file.ast` AST.
  *
- * ES2015 options enabled.
+ * ES2015 syntax enabled
+ *
+ * ```
+ * parse({path: '', content: ''}) // => {path: '', content: '', ast: {}}
+ * ```
  *
  * @summary File -> File
  */

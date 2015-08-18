@@ -44,8 +44,8 @@ if (plugin) {
   }
 }
 
-var jsFile = function (file) {
-  return file.path.match(/(.+)\.js$/)
+var jsFile = function (filepath) {
+  return filepath.match(/(.+)\.js$/)
 }
 
 /**

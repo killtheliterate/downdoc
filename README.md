@@ -46,9 +46,9 @@ where
 Then use it like
 
 ```shell
-downdoc --plugin path/to/my/plugin.js src docs
+downdoc --template path/to/my/template.js src docs
 # or
-downdoc -p name-of-installed-npm-package src docs
+downdoc -t name-of-installed-npm-package src docs
 ```
 
 ## API Docs

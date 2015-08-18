@@ -7,7 +7,7 @@ var remove = async.liftNode(require('fs-extra').remove)
 var argv = require('minimist')(process.argv.slice(2))
 var folder = argv._[0]
 var out = argv._[1]
-var plugin = argv.p || argv.plugin || '../lib/downdoc'
+var plugin = argv.template || argv.t || '../lib/downdoc'
 
 var write = require('../src/write')
 var parse = require('../src/parse')

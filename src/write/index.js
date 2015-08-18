@@ -13,9 +13,7 @@ var writeAsText = fs.writeAsText
 module.exports = curry(2, function (out, files) {
   return async.parallel(
     files.map(function (file) {
-      var path = file.path.split('.')
-      path.pop()
-      path = out + path.join('.') + file.extension
+      var path = out + file.path
 
       var folder = file.path.split('/')
       folder.pop()

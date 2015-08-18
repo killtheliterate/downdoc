@@ -32,10 +32,13 @@ var readWithRoot = function (root) {
  * Reads all the files in a folder that match the predicate and turns them into
  * an array of file objects.
  *
- * ```js
+ * file objects look like:
+ * ```
  * {
  *   path :: String,
  *   content :: String,
+ *   ast: :: Object,
+ *   doclet :: a 
  * }
  * ```
  *

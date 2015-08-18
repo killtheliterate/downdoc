@@ -6,6 +6,10 @@
 Looks for ES2015 named exports and their leading comments and creates markdown
 files that mirror the folder structure of the one supplied.
 
+## Docs
+
+`downdoc` creates it's own [docs](/docs)
+
 ## Install
 
 ```shell

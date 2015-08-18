@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+var path = require('path')
 
 var compose = require('lodash.compose')
 var async = require('control.async')(require('data.task'))
@@ -24,16 +25,19 @@ var jsFile = function (file) {
  * - Read files and create docs
  * - Write to docs folder
  */
-remove(process.cwd() + '/' + out)
+remove(path.resolve(out))
   .chain(function () {
     return read(jsFile, folder).map(function (files) {
       return files.map(parse).map(createDocs)
     })
   })
-  .chain(write(out))
+  
+  .chain(function (files) {
+    return write(out, files)
+  })
   .fork(
     function (e) {throw e},
     function (x) {
-      console.log('Documentation has been generated!')
+      console.log('Done.')
     }
   )

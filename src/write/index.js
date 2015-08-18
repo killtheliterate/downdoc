@@ -1,3 +1,5 @@
+var path = require('path')
+
 var fs = require('io.filesystem')(require('fs'))
 var async = require('control.async')(require('data.task'))
 var ensureDir = async.liftNode(require('fs-extra').ensureDir)
@@ -13,15 +15,15 @@ var writeAsText = fs.writeAsText
 module.exports = curry(2, function (out, files) {
   return async.parallel(
     files.map(function (file) {
-      var path = out + file.path
+      var filepath = path.resolve(out + file.path)
 
       var folder = file.path.split('/')
       folder.pop()
-      folder = process.cwd() + '/' + out + folder.join('/')
+      folder = path.resolve(out + folder.join('/'))
 
       return ensureDir(folder)
         .chain(function () {
-          return writeAsText(process.cwd() + '/' + path, file.content)
+          return writeAsText(filepath, file.content)
         })
       })
   )

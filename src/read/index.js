@@ -1,3 +1,6 @@
+var path = require('path')
+var root = require('app-root-path')
+
 var fs = require('io.filesystem')(require('fs'))
 var Task = require('data.task')
 var async = require('control.async')(Task)
@@ -15,12 +18,15 @@ var cwd = process.cwd()
  *
  * @summary String -> String -> File
  */
-var readWithRoot = function (root) {
+var readWithRoot = function (folder) {
   return function (file) {
     return new Task(function (reject, resolve) {
       readAsText(file).fork(reject, function (content) {
+        var filepath = file
+          .replace(root, '')
+          .replace('/' + folder.split('/').slice(-1), '')
         resolve({
-          path: file.replace(cwd, '').replace('/' + root, ''),
+          path: filepath,
           content: content,
         })
       })
@@ -45,7 +51,7 @@ var readWithRoot = function (root) {
  * @summary (File -> Bool) -> String -> IO (Array File)
  */
 module.exports = curry(2, function (predicate, folder) {
-  return listDirectoryRecursively(cwd + '/' + folder)
+  return listDirectoryRecursively(path.resolve(folder))
     .chain(function (files) {
       return async.parallel(files.map(readWithRoot(folder)))
     })

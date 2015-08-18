@@ -1,86 +1,30 @@
 var fs = require('io.filesystem')(require('fs'))
-var Task = require('data.task')
-var async = require('control.async')(Task)
+var async = require('control.async')(require('data.task'))
 var ensureDir = async.liftNode(require('fs-extra').ensureDir)
-var remove = async.liftNode(require('fs-extra').remove)
+var curry = require('core.lambda').curry
+
+var writeAsText = fs.writeAsText
 
 /**
- * Takes a `doccer` or documentation creating function (typically a composition
- * of `parse` and `render`, a folder to document and a path to write the docs
- * and does it.
+ * Writes the files given in parallel to the provided folder.
  *
- * TODO:
- *   Refactor! This file feels dirty. The signature seems okay though
- *
- * @summary (Doc -> String) -> String -> String -> Future Error Void
+ * @summary String -> Array File -> Future Error (IO ())
  */
-module.exports = function (doccer, ext, folder, out) {
-  var cwd = process.cwd()
+module.exports = curry(2, function (out, files) {
+  return async.parallel(
+    files.map(function (file) {
+      var path = file.path.split('.')
+      path.pop()
+      path = out + path.join('.') + file.extension
 
-  var write = function (file) {
+      var folder = file.path.split('/')
+      folder.pop()
+      folder = process.cwd() + '/' + out + folder.join('/')
 
-    // This is probably a really bad way to do this.
-    var setName = function (path, name) {
-      var pathArray = path.split('/') 
-      return pathArray
-        .slice(0, pathArray.length - 1)
-        .concat(
-          pathArray
-            .slice(-1)
-            .map(function (oldname) {
-              var ext = oldname.split('.').slice(-1)[0]
-              return name + '.' + ext
-            })
-        )
-        .join('/')
-    } 
-    var fileName = file.path.split('/').slice(-1)[0]
-
-    var directory = file.path
-      .replace(cwd, '')
-      .replace(fileName, '')
-
-    var path = fileName.match('index') ? setName(file.path, 'README') : file.path
-  
-    // no-op if no docs
-    if (file.content.length <= 0) return new Task(function (reject, resolve) {
-      resolve(function () {})
-    })
-
-    return ensureDir(cwd + directory)
-      .chain(function () {
-        return fs.writeAsText(path, file.content)
-      })
-  }
-  
-  var read = function (file) {
-    return new Task(function (reject, resolve) {
-      fs.readAsText(file).fork(reject, function (content) {
-        resolve({
-          path: file.replace(cwd, '').replace('/' + folder, ''),
-          content: content,
+      return ensureDir(folder)
+        .chain(function () {
+          return writeAsText(process.cwd() + '/' + path, file.content)
         })
       })
-    })
-  }
-  
-  var parse = function (file) {
-    return {
-      path: file.path,
-      content: doccer(file.content),
-    }
-  }
-
-  return fs.listDirectoryRecursively(cwd + '/' + folder)
-    .chain(function (files) { return async.parallel(files.map(read)) })
-    .map(function (files) { return files.map(parse) })
-    .chain(function (files) {
-      return async.parallel(files.map(function (file) {
-        // console.log(file.content.join('\n'))
-        return write({
-          path: out + file.path.replace('.js', ext),
-          content: file.content.join('\n')
-        })
-      }))
-    })
-}
+  )
+})

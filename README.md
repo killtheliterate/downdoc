@@ -1,10 +1,5 @@
 # downdoc
-> Simple JavaScript markdown documentation generator.
-
-## How does it work?
-
-Looks for ES2015 named exports and their leading comments and creates markdown
-files that mirror the folder structure of the one supplied.
+> Simple JavaScript documentation generator.
 
 ## Install
 

@@ -117,7 +117,7 @@ var pluckAST = function (ast) {
  */
 var template = function (doclets) {
   return doclets.map(function (doclet) {
-    return '`' + doclet.name + ' :: ' + doclet.signature + '`' +
+    return '## `' + doclet.name + ' :: ' + doclet.signature + '`' +
       '\n\n' + doclet.comment
   }).join('\n')
 }
@@ -136,16 +136,17 @@ var docPath = function (p) {
 }
 
 /**
- * Create markdown docs from a VinylFile AST
+ * Create downdocs docs stream from an AST stream
  *
  * ```js
  * var map = require('map-stream')
- * var parse = require('downdoc/src/parse')
  * var downdoc = require('downdoc')
+ * var parse = require('downdoc/util/parse')
  *
  * fs.src('src/*.js')
  *   .pipe(map(parse))
  *   .pipe(map(downdoc))
+ *   .pipe(fs.dest('docs'))
  * ```
  *
  * @summary VinyFile -> ()

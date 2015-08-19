@@ -15,7 +15,6 @@ var error = function (message) {
 var usage = function () {
   console.log([
     '\nUsage: downdoc [GLOB] [OUT_DIR]\n',
-    //'  -t --template      A local or npm module\n'
   ].join(''))
 }
 
@@ -37,10 +36,5 @@ rimraf(resolve(out), function (e) {
   fs.src(glob)
     .pipe(map(parse))
     .pipe(map(downdoc))
-    // .pipe(rename({ extname: '.md' }))
-    // .pipe(map(function (file, cb) {
-    //   console.log(file.inspect())
-    //   cb(null, file)
-    // }))
     .pipe(fs.dest(out))
 })

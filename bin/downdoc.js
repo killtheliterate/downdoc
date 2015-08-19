@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 var fs = require('vinyl-fs')
 var map = require('map-stream')
-var rename = require('gulp-rename')
 var extend = require('xtend')
 var rimraf = require('rimraf')
 var resolve = require('path').resolve
@@ -37,4 +36,6 @@ rimraf(resolve(out), function (e) {
     .pipe(map(parse))
     .pipe(map(downdoc))
     .pipe(fs.dest(out))
+  console.log(
+    '\nDocumentation has been written to `' + resolve(out) + '`\n')
 })

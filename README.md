@@ -7,51 +7,18 @@
 npm i downdoc
 ```
 
+Install globally with `-g` if you really want but honestly you should just add
+it as a `package.json` script. :smile:
+
 ## Usage
 
 ```shell
-downdoc src/js docs
-```
-
-## Pluggable
-
-Create a module that exports a single function that takes
-
-```
-{
-  path :: String,
-  content :: String,
-  ast :: ASTObject
-}
-```
-where
-  - `path` is the path of the JS file relative to the project root
-  - `content` is the... content
-  - `ast` is an abstract syntax tree object of the JS file
-
-and returns 
-
-```
-{
-  path :: String,
-  content :: String
-}
-```
-
-where 
-  - the `path` is relative to the project directory and includes the
-    filename + extension
-  - `content` is the documentation of the file
-
-Then use it like
-
-```shell
-downdoc --template path/to/my/template.js src docs
-# or
-downdoc -t name-of-installed-npm-package src docs
+downdoc "src/js/**/*.js" docs
 ```
 
 ## API Docs
+
+*Hint:* It's really easy to use downdoc with Gulp if that's your thing.
 
 `downdoc` creates it's own [docs](/docs)
 

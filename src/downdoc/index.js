@@ -122,18 +122,16 @@ var template = function (doclets) {
   }).join('\n')
 }
 
-/**
- * @summary String -> String
- */
 var docPath = function (p) {
-
-  var parsed = path.parse(p)
-  var name = parsed.name.match('index') ? 'README' : parsed.name
   var ext = '.md'
+  var parsed = path.parse(p)
+
+  var name = parsed.name === 'index' ? 'README' : parsed.name 
+
   return path.format(extend(parsed, {
-    name: name,
+    base: name + ext,
     ext: ext,
-    base: name + ext
+    name: name,
   }))
 }
 
@@ -153,8 +151,11 @@ var docPath = function (p) {
  * @summary VinyFile -> ()
  */
 module.exports = function (file, cb) {
-  cb(null, extend(file, {
-    path: docPath(file.path),
-    contents: new Buffer(template(pluckAST(JSON.parse(String(file.contents)))))
-  }))
+  file.path = docPath(file.path)
+  file.contents = new Buffer(
+    template(
+      pluckAST(
+        JSON.parse(
+          String(file.contents)))))
+  cb(null, file)
 }

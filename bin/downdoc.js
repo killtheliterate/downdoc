@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 var fs = require('vinyl-fs')
 var map = require('map-stream')
+var rename = require('gulp-rename')
 var extend = require('xtend')
+var rimraf = require('rimraf')
+var resolve = require('path').resolve
 
 var error = function (message) {
   console.log('\n' + 'ERROR: ' + message)
@@ -26,20 +29,18 @@ if (help) { usage(); process.exit(0) }
 if (!glob) error('Please provide a source folder.')
 if (!out) error('Please provide an out folder.')
 
+var parse = require('../util/parse')
+var downdoc = require('..')
 
-var parse = require('../src/parse')
-var transform = require('../src/downdoc')
-
-fs.src(glob)
-  .pipe(map(function (file, cb) {
-    cb(null, extend(file, {
-      path: file.history[0]
-    }))
-  }))
-  .pipe(map(parse))
-  .pipe(map(transform))
-  .pipe(map(function (file, cb) {
-    console.log(typeof file.path)
-    cb(null, file)
-  }))
-  .pipe(fs.dest(out))
+rimraf(resolve(out), function (e) {
+  if (e) throw e
+  fs.src(glob)
+    .pipe(map(parse))
+    .pipe(map(downdoc))
+    // .pipe(rename({ extname: '.md' }))
+    // .pipe(map(function (file, cb) {
+    //   console.log(file.inspect())
+    //   cb(null, file)
+    // }))
+    .pipe(fs.dest(out))
+})

@@ -35,6 +35,6 @@ rimraf(resolve(out), function (e) {
     .pipe(fs.dest(out))
     .on('end', function () {
       console.log(
-        'Documentation has been written to `' + resolve(out) + '`\n')
+        '\nDocumentation has been written to `' + resolve(out) + '`\n')
     })
 })

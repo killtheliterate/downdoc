@@ -52,8 +52,11 @@ var extract = function (string) {
  * @summary Docs -> String 
  */
 var template = function (docs) {
+  var signature = function (sig) {
+    return sig ? ' :: ' + sig + '`' : ''
+  }
   return docs.map(function (doc) {
-    return '## `' + doc.name + ' :: ' + doc.tags.summary + '`' +
+    return '## `' + doc.name + signature(doc.tags.summary) +
       '\n\n' + doc.content + '\n'
   }).join('\n').trim()
 }
@@ -92,6 +95,7 @@ module.exports = function () {
     file.contents = new Buffer(
       template(extract(String(file.contents), {sourceType: 'module'}))
     )
+    if (file.contents.length === 0) {return cb()}
     cb(null, file)
   })
 }

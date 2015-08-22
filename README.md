@@ -1,5 +1,7 @@
 # downdoc
-> Simple JavaScript documentation generator.
+> Simple JavaScript markdown documentation generator.
+
+Turns [JS files](/examples/src) into [Markdown docs](/examples/docs)
 
 ## Install
 
@@ -20,7 +22,7 @@ downdoc "src/js/**/*.js" docs
 
 *Hint:* It's really easy to use downdoc with Gulp if that's your thing.
 
-`downdoc` creates it's own [docs](/docs/downdoc)
+`downdoc` creates it's own [docs](/docs)
 
 ## Bugs?
 

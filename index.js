@@ -84,7 +84,7 @@ var md = function (p) {
  *   .pipe(vinyl.dest('docs'))
  * ```
  *
- * @summary Stream Vinyl -> Stream Vinyl
+ * @summary () -> Stream Vinyl -> Stream Vinyl
  */
 module.exports = function () {
   return map(function (file, cb) {

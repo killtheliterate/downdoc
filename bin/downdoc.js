@@ -33,6 +33,8 @@ rimraf(resolve(out), function (e) {
   fs.src(glob)
     .pipe(downdoc())
     .pipe(fs.dest(out))
-  console.log(
-    '\nDocumentation has been written to `' + resolve(out) + '`\n')
+    .on('end', function () {
+      console.log(
+        'Documentation has been written to `' + resolve(out) + '`\n')
+    })
 })

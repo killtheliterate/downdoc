@@ -1,4 +1,4 @@
-## `module :: Stream Vinyl -> Stream Vinyl`
+## `module :: () -> Stream Vinyl -> Stream Vinyl`
 
 Pipe a stream of vinyl files to this to get them turned into markdown docs.
 

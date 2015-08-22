@@ -52,11 +52,12 @@ var extract = function (string) {
  * @summary Docs -> String 
  */
 var template = function (docs) {
-  var signature = function (sig) {
-    return sig ? ' :: ' + sig + '`' : ''
+  var signature = function (name, sig) {
+    return sig ?      '## `' + name + ' :: ' + sig + '`' 
+    : /* otherwise */ '## ' + name
   }
   return docs.map(function (doc) {
-    return '## `' + doc.name + signature(doc.tags.summary) +
+    return  signature(doc.name, doc.tags.summary) +
       '\n\n' + doc.content + '\n'
   }).join('\n').trim()
 }

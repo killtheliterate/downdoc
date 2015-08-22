@@ -1,4 +1,4 @@
-## water
+## `water`
 
 Water is a noop
 

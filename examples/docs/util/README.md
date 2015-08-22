@@ -1,10 +1,7 @@
 ## `water :: () -> ()`
 
 Water is a noop
- 
- 
-## `defaultExport :: () -> ()`
+
+## `module :: () -> ()`
 
 Fire is a noop too
- 
- 

@@ -54,7 +54,7 @@ var extract = function (string) {
 var template = function (docs) {
   var signature = function (name, sig) {
     return sig ?      '## `' + name + ' :: ' + sig + '`' 
-    : /* otherwise */ '## ' + name
+    : /* otherwise */ '## `' + name + '`'
   }
   return docs.map(function (doc) {
     return  signature(doc.name, doc.tags.summary) +

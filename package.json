@@ -1,6 +1,6 @@
 {
   "name": "downdoc",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "description": "Simple JavaScript documentation generator.",
   "main": "index.js",
   "bin": {
@@ -8,7 +8,6 @@
   },
   "scripts": {
     "prepublish": "npm run docs && npm run example-docs",
-
     "docs": "./bin/downdoc.js 'index.js' docs",
     "example-docs": "./bin/downdoc.js 'examples/src/**/*.js' examples/docs"
   },

@@ -10,7 +10,7 @@
     "prepublish": "npm run docs && npm run example-docs",
 
     "docs": "./bin/downdoc.js 'index.js' docs",
-    "example-docs": "./bin/downdoc.js 'examples/**/*.js' examples/docs"
+    "example-docs": "./bin/downdoc.js 'examples/src/**/*.js' examples/docs"
   },
   "keywords": [
     "markdown",

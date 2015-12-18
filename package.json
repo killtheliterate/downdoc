@@ -7,7 +7,10 @@
     "downdoc": "bin/downdoc.js"
   },
   "scripts": {
-    "docs": "./bin/downdoc.js 'index.js' docs"
+    "prepublish": "npm run docs && npm run example-docs",
+
+    "docs": "./bin/downdoc.js 'index.js' docs",
+    "example-docs": "./bin/downdoc.js 'examples/**/*.js' examples/docs"
   },
   "keywords": [
     "markdown",

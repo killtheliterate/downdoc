@@ -1,13 +1,15 @@
 export const join = joinator => array => array.join(joinator)
 
 /**
- * Water is a noop
+ * `dog :: () -> Dog`
+ *
+ * create a _dog_
  */
-exports.water = function () {}
+exports.dog = function () {}
 
 /**
- * Fire is a noop too
+ * `fire :: () -> Fire`
  *
- * @summary () -> ()
+ * create **fire**
  */
 module.exports = function () {}

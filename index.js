@@ -3,6 +3,10 @@ var map      = require('map-stream')
 var comments = require('acorn-extract-comments')
 var extend   = require('xtend')
 
+/**
+ * Some AST dragons here just pulling out the comments, name of function and
+ * JSDoc tags.
+ */
 var extract = function (string) {
   return comments(string, {sourceType: 'module'}).comments
     .filter(function (comment) {
@@ -52,13 +56,8 @@ var extract = function (string) {
  * @summary Docs -> String 
  */
 var template = function (docs) {
-  var signature = function (name, sig) {
-    return sig ?      '## `' + name + ' :: ' + sig + '`' 
-    : /* otherwise */ '## `' + name + '`'
-  }
   return docs.map(function (doc) {
-    return  signature(doc.name, doc.tags.summary) +
-      '\n\n' + doc.content + '\n'
+    return '\n' + doc.content + '\n'
   }).join('\n').trim()
 }
 
@@ -76,6 +75,8 @@ var md = function (p) {
 }
 
 /**
+ * `downdoc :: () -> Stream Vinyl -> Stream Vinyl`
+ *
  * Pipe a stream of vinyl files to this to get them turned into markdown docs.
  *
  * ```js
@@ -87,8 +88,6 @@ var md = function (p) {
  *   .pipe(downdoc())
  *   .pipe(vinyl.dest('docs'))
  * ```
- *
- * @summary () -> Stream Vinyl -> Stream Vinyl
  */
 module.exports = function () {
   return map(function (file, cb) {

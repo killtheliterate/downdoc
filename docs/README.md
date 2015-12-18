@@ -1,6 +1,6 @@
-## `module :: () -> Stream Vinyl -> Stream Vinyl`
+`downdoc :: () -> Stream Vinyl -> Stream Vinyl`
 
-Pipe a stream of vinyl files to this to get them turned into markdown docs.
+ Pipe a stream of vinyl files to this to get them turned into markdown docs.
 
  ```js
  var vinyl = require('vinyl-fs')
